@@ -1,6 +1,8 @@
 {
     "env":{
         "MONGO_USERNAME" :"ron" , 
-        "MONGO_PASSWORD": "DS0IsJP5auBqJDBR"
+        "MONGO_PASSWORD": "DS0IsJP5auBqJDBR" ,
+        "JWT_KEY" :"youtube-article-api" 
+        
     }
 }

@@ -30,9 +30,9 @@ module.exports ={
         });
     },
     createNewArticle: (req, res)=>{
-        console.log(req.file);
-        const { title, description, content , categoryId} = req.body;
+        const {path: image} = req.file;
 
+        const { title, description, content , categoryId } = req.body;
         Category.findById(categoryId).then((category)=>{
             if(!category){
                 return res.status(404).json({
@@ -45,21 +45,19 @@ module.exports ={
                 title ,
                 description,
                 content,
-                categoryId
+                categoryId,
+                image : image.replace('\\', '/')
             });
-
-            return articles.save();
-        }).then(()=>{
-            article.save().then(()=>{
+            return article.save().then(()=>{
                 res.status(200).json({
                     message: 'Create new article'
-                })    
-            }).catch(error =>{
+                }) 
+            }).catch(error=>{
                 res.status(500).json({
                     error
-                })
-            });
-        })      
+                });
+            })    
+        }) 
     }, 
     updateArticle: (req, res)=>{
         const articleId = req.params.articleId;

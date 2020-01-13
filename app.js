@@ -3,9 +3,12 @@ const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
+const checkAuth = require('../youtube-nodejs-express/api/middlewares/checkAuth');
+
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@youtube-articles-api-vcdeo.mongodb.net/test?retryWrites=true&w=majority`,{
     useNewUrlParser :true, 
-    useUnifiedTopology :true
+    useUnifiedTopology :true,
+    useCreateIndex :true
 });
 
 mongoose.connection.on('connected',()=>{
@@ -17,6 +20,7 @@ const categoriesRoutes = require('./api/routes/categories');
 const usersRoutes = require('./api/routes/users');
 
 app.use(morgan("dev"));
+app.use('/uploads', express.static('uploads'));
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -35,7 +39,7 @@ app.use((req ,res , next) =>{
 
 //Routes 
 app.use('/articles', articlesRoutes);
-app.use('/categories', categoriesRoutes);
+app.use('/categories',checkAuth ,categoriesRoutes);
 app.use('/users', usersRoutes);
 
 app.use((req ,res , next)=>{
